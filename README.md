@@ -1,145 +1,136 @@
+YOLOv12 Person Tracking System
+<div align="center"> <img src="assets/person_tracking_sample.jpg" width="80%" alt="Person Tracking System Demo"> <p>Real-time person detection and trajectory tracking with YOLOv12</p> </div>
+📝 Description
+This repository contains an advanced person detection and tracking system built on YOLOv12. The system detects people in video streams and visualizes their movement patterns with trajectory lines, providing valuable insights for surveillance, retail analytics, and crowd monitoring applications.
 
+Developed by William19D based on the YOLOv12 framework.
 
-<div align="center">
-<h1>YOLOv12</h1>
-<h3>YOLOv12: Attention-Centric Real-Time Object Detectors</h3>
+✨ Features
+Real-time Person Detection: Uses YOLOv12's attention-based architecture for accurate people detection
+Trajectory Visualization: Tracks individuals with unique IDs and shows their movement paths with red trails
+False Positive Filtering: Intelligently distinguishes between people and static objects like poles
+Multi-scale Detection: Employs two-pass detection to capture difficult cases and partial occlusions
+Movement Analysis: Categorizes objects as static or moving based on trajectory patterns
+Visual Statistics: Shows current person count, maximum persons detected, and frame information
+🛠️ Installation
+bash
+# Clone the repository
+git clone https://github.com/William19D/person-tracker.git
+cd person-tracker
 
-[Yunjie Tian](https://sunsmarterjie.github.io/)<sup>1</sup>, [Qixiang Ye](https://people.ucas.ac.cn/~qxye?language=en)<sup>2</sup>, [David Doermann](https://cse.buffalo.edu/~doermann/)<sup>1</sup>
+# Create conda environment
+conda create -n person-tracker python=3.11
+conda activate person-tracker
 
-<sup>1</sup>  University at Buffalo, SUNY, <sup>2</sup> University of Chinese Academy of Sciences.
-
-
-<p align="center">
-  <img src="assets/tradeoff.svg" width=90%> <br>
-  Comparison with popular methods in terms of latency-accuracy (left) and FLOPs-accuracy (right) trade-offs
-</p>
-
-</div>
-
-[![arXiv](https://img.shields.io/badge/arXiv-2502.12524-b31b1b.svg)](https://arxiv.org/abs/2502.12524) [![Hugging Face Demo](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/sunsmarterjieleaf/yolov12) <a href="https://colab.research.google.com/github/roboflow-ai/notebooks/blob/main/notebooks/train-yolov12-object-detection-model.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a> [![deploy](https://media.roboflow.com/deploy.svg)](https://blog.roboflow.com/use-yolov12-with-roboflow/#deploy-yolov12-models-with-roboflow)
-
-## Updates
-- 2025/02/22: [Android deploy](https://github.com/mpj1234/ncnn-yolov12-android/tree/main). [TensorRT-YOLO](https://github.com/laugh12321/TensorRT-YOLO) accelerates yolo12 inference. Thanks to them!
-
-- 2025/02/21: Try yolo12 for classification, oriented bounding boxes, pose estimation, and instance segmentation at [ultralytics](https://github.com/ultralytics/ultralytics/tree/main/ultralytics/cfg/models/12). Thanks to them!
-
-- 2025/02/20: [Any computer or edge device?](https://github.com/roboflow/inference) Support yolo12 now.  
-
-- 2025/02/20: [ONNX CPP Version](https://github.com/mohamedsamirx/YOLOv12-ONNX-CPP). [Train a yolov12 model on a custom dataset?](https://blog.roboflow.com/train-yolov12-model/) An introduction at [Youtube](https://www.youtube.com/watch?v=1YZDsZL_VyI&t=120s).
-
-- 2025/02/19: [arXiv version](https://arxiv.org/abs/2502.12524) is public. [Demo](https://huggingface.co/spaces/sunsmarterjieleaf/yolov12) is available (try [Demo2](https://huggingface.co/spaces/sunsmarterjieleaf/yolov12_demo2) [Demo3](https://huggingface.co/spaces/sunsmarterjieleaf/yolov12_demo3) if busy).
-
-- **2025/02/23**: [YOLO12: How to Train for Object Detection on a Custom Dataset | Step-by-step Guide](https://youtu.be/dO8k5rgXG0M) by [Noor](https://github.com/noorkhokhar99). A comprehensive tutorial on training YOLO12 with custom datasets.
-
-
-<details>
-  <summary>
-  <font size="+1">Abstract</font>
-  </summary>
-Enhancing the network architecture of the YOLO framework has been crucial for a long time but has focused on CNN-based improvements despite the proven superiority of attention mechanisms in modeling capabilities. This is because attention-based models cannot match the speed of CNN-based models. This paper proposes an attention-centric YOLO framework, namely YOLOv12, that matches the speed of previous CNN-based ones while harnessing the performance benefits of attention mechanisms.
-
-YOLOv12 surpasses all popular real-time object detectors in accuracy with competitive speed. For example, YOLOv12-N achieves 40.6% mAP with an inference latency of 1.64 ms on a T4 GPU, outperforming advanced YOLOv10-N / YOLOv11-N by 2.1%/1.2% mAP with a comparable speed. This advantage extends to other model scales. YOLOv12 also surpasses end-to-end real-time detectors that improve DETR, such as RT-DETR / RT-DETRv2: YOLOv12-S beats RT-DETR-R18 / RT-DETRv2-R18 while running 42% faster, using only 36% of the computation and 45% of the parameters.
-</details>
-
-
-## Main Results
-
-| Model                                                                                | size<br><sup>(pixels) | mAP<sup>val<br>50-95 | Speed<br><sup>T4 TensorRT10<br> | params<br><sup>(M) | FLOPs<br><sup>(G) |
-| :----------------------------------------------------------------------------------- | :-------------------: | :-------------------:| :------------------------------:| :-----------------:| :---------------:|
-| [YOLO12n](https://github.com/sunsmarterjie/yolov12/releases/download/v1.0/yolov12n.pt) | 640                   | 40.6                 | 1.64                            | 2.6                | 6.5               |
-| [YOLO12s](https://github.com/sunsmarterjie/yolov12/releases/download/v1.0/yolov12s.pt) | 640                   | 48.0                 | 2.61                            | 9.3                | 21.4              |
-| [YOLO12m](https://github.com/sunsmarterjie/yolov12/releases/download/v1.0/yolov12m.pt) | 640                   | 52.5                 | 4.86                            | 20.2               | 67.5              |
-| [YOLO12l](https://github.com/sunsmarterjie/yolov12/releases/download/v1.0/yolov12l.pt) | 640                   | 53.7                 | 6.77                            | 26.4               | 88.9              |
-| [YOLO12x](https://github.com/sunsmarterjie/yolov12/releases/download/v1.0/yolov12x.pt) | 640                   | 55.2                 | 11.79                           | 59.1               | 199.0             |
-
-## Installation
-```
-wget https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.3/flash_attn-2.7.3+cu11torch2.2cxx11abiFALSE-cp311-cp311-linux_x86_64.whl
-conda create -n yolov12 python=3.11
-conda activate yolov12
+# Install dependencies
 pip install -r requirements.txt
-pip install -e .
-```
 
-## Validation
-[`yolov12n`](https://github.com/sunsmarterjie/yolov12/releases/download/v1.0/yolov12n.pt)
-[`yolov12s`](https://github.com/sunsmarterjie/yolov12/releases/download/v1.0/yolov12s.pt)
-[`yolov12m`](https://github.com/sunsmarterjie/yolov12/releases/download/v1.0/yolov12m.pt)
-[`yolov12l`](https://github.com/sunsmarterjie/yolov12/releases/download/v1.0/yolov12l.pt)
-[`yolov12x`](https://github.com/sunsmarterjie/yolov12/releases/download/v1.0/yolov12x.pt)
-
-```python
+# Install YOLOv12
+pip install ultralytics
+📊 Usage
+Basic Command
+bash
+python person_tracker.py --video your_video.mp4
+Advanced Options
+bash
+python person_tracker.py --video your_video.mp4 --confidence 0.4 --iou 0.45 --save-video True --show-preview True
+Running with Python Code
+Python
+import cv2
+import torch
+import numpy as np
+from collections import defaultdict
 from ultralytics import YOLO
 
-model = YOLO('yolov12{n/s/m/l/x}.pt')
-model.val(data='coco.yaml', save_json=True)
-```
+# Load the model
+model = YOLO("yolov8n.pt")  # or use "yolov12n.pt" if available
 
-## Training 
-```python
-from ultralytics import YOLO
+# Configure video capture
+cap = cv2.VideoCapture("your_video.mp4")
 
-model = YOLO('yolov12n.yaml')
+# Run the tracker - see configuration section for parameters
+# ...rest of the code as provided in the main implementation
+⚙️ Configuration
+You can customize the tracking system with these parameters:
 
-# Train the model
-results = model.train(
-  data='coco.yaml',
-  epochs=600, 
-  batch=256, 
-  imgsz=640,
-  scale=0.5,  # S:0.9; M:0.9; L:0.9; X:0.9
-  mosaic=1.0,
-  mixup=0.0,  # S:0.05; M:0.15; L:0.15; X:0.2
-  copy_paste=0.1,  # S:0.15; M:0.4; L:0.5; X:0.6
-  device="0,1,2,3",
-)
+Python
+# Core settings
+VIDEO_PATH = "test.mp4"        # Input video file
+MODEL = "yolov8n.pt"           # Detection model (compatible with YOLOv8/YOLOv12)
+CONFIDENCE = 0.4               # Confidence threshold (0.0-1.0)
+SAVE_VIDEO = True              # Save output video with annotations
 
-# Evaluate model performance on the validation set
-metrics = model.val()
+# Detection parameters
+TRACK_PEOPLE_ONLY = True       # Only detect and track people
+IOU_THRESHOLD = 0.45           # IoU threshold for NMS
+MAX_DETECTIONS = 100           # Maximum objects to detect per frame
 
-# Perform object detection on an image
-results = model("path/to/image.jpg")
-results[0].show()
+# Display settings
+SHOW_LIVE_PREVIEW = True       # Show real-time processing window
+MIN_HUMAN_HEIGHT = 40          # Minimum pixel height to consider as human
+MIN_HUMAN_WIDTH = 15           # Minimum pixel width to consider as human
+📋 Output Examples
+The system produces several outputs:
 
-```
+Processed Video: Video file with person detections and trajectories
+Detection Images:
+Periodic frame captures saved to /detections folder
+Maximum person count frame saved as max_N_people_frame_X.jpg
+Terminal Statistics:
+Processing progress and estimated time
+Final count statistics and performance metrics
+🌟 Applications
+Security & Surveillance: Track individuals across camera views
+Retail Analytics: Analyze customer movement patterns in stores
+Urban Planning: Study pedestrian flow in public spaces
+Event Management: Monitor crowd density and movement at events
+Traffic Analysis: Analyze pedestrian crossing patterns
+👨‍💻 Code Example
+Here's a simplified version of the core tracking logic:
 
-## Prediction
-```python
-from ultralytics import YOLO
-
-model = YOLO('yolov12{n/s/m/l/x}.pt')
-model.predict()
-```
-
-## Export
-```python
-from ultralytics import YOLO
-
-model = YOLO('yolov12{n/s/m/l/x}.pt')
-model.export(format="engine", half=True)  # or format="onnx"
-```
-
-
-## Demo
-
-```
-python app.py
-# Please visit http://127.0.0.1:7860
-```
-
-
-## Acknowledgement
-
-The code is based on [ultralytics](https://github.com/ultralytics/ultralytics). Thanks for their excellent work!
-
-## Citation
-
-```BibTeX
+Python
+# Process detected persons
+for person_box in person_boxes:
+    # Extract box coordinates and tracking ID
+    x1, y1, x2, y2, track_id, confidence = extract_box_info(person_box)
+    
+    # Validate if detection is actually a person
+    if not is_valid_human(x1, y1, x2, y2, track_id):
+        continue
+    
+    # Calculate center point for tracking
+    center_x = (x1 + x2) // 2
+    center_y = (y1 + y2) // 2
+    
+    # Add to tracking history
+    track_history[track_id].append((center_x, center_y))
+    
+    # Draw bounding box (green)
+    cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+    
+    # Draw trajectory trail (red)
+    for j in range(1, len(track_history[track_id])):
+        if len(track_history[track_id]) > 30:  # Limit trail length
+            track_history[track_id].pop(0)
+        
+        # Draw line between consecutive points
+        pt1 = track_history[track_id][j-1]
+        pt2 = track_history[track_id][j]
+        cv2.line(frame, pt1, pt2, (0, 0, 255), 2)
+🙏 Acknowledgements
+YOLOv12 algorithm by Yunjie Tian, Qixiang Ye, and David Doermann
+Based on ultralytics implementation
+OpenCV community for image processing tools
+📄 Citation
+BibTeX
 @article{tian2025yolov12,
   title={YOLOv12: Attention-Centric Real-Time Object Detectors},
   author={Tian, Yunjie and Ye, Qixiang and Doermann, David},
   journal={arXiv preprint arXiv:2502.12524},
   year={2025}
 }
-```
+📧 Contact
+For questions or feedback, please contact:
 
+GitHub: @William19D
+<p align="center">Made with ❤️ for computer vision and AI research</p>
